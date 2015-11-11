@@ -146,14 +146,12 @@ Demo sites
 
 Demo sites
 ------------
-**2.0 rc1**
- + http://elfinder.org/
+**2.0**
+ + http://elfinder.org/ (rc1)
+ + http://hypweb.net/elFinder-nightly/demo/2.0/ (2.0.x Nightly)
 
-**2.0.x**
- + http://hypweb.net/elFinder-nightly/demo/2.0/
-
-**2.1.x**
- + http://studio-42.github.io/elFinder/ (with CORS to next)
+**2.1.x Nightly**
+ + http://studio-42.github.io/elFinder/ (with CORS)
  + http://hypweb.net/elFinder-nightly/demo/2.1/
 
 FAQs
