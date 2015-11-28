@@ -70,7 +70,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 			'files_table'   => 'elfinder_file',
 			'tmbPath'       => '',
 			'tmpPath'       => '',
-			'icon'          => (defined('ELFINDER_IMG_PARENT_URL')? (rtrim(ELFINDER_IMG_PARENT_URL, '/').'/') : '').'img/volume_icon_sql.png'
+			'rootCssClass'  => 'elfinder-navbar-root-sql'
 		);
 		$this->options = array_merge($this->options, $opts);
 		$this->options['mimeDetect'] = 'internal';
@@ -336,8 +336,8 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 				} else {
 					$whrs[] = sprintf('f.mime = "%s"', $this->db->real_escape_string($mime));
 				}
-				$whr = join(' OR ', $whrs);
 			}
+			$whr = join(' OR ', $whrs);
 		} else {
 			$whr = sprintf('f.name RLIKE "%s"', $this->db->real_escape_string($q));
 		}
@@ -762,6 +762,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 					fwrite($trgfp, fread($fp, 8192));
 				}
 				fclose($trgfp);
+				chmod($tmpfile, 0644);
 				
 				$sql = $id > 0
 					? 'REPLACE INTO %s (id, parent_id, name, content, size, mtime, mime, width, height) VALUES ('.$id.', %d, "%s", LOAD_FILE("%s"), %d, %d, "%s", %d, %d)'

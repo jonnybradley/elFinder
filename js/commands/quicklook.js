@@ -135,7 +135,7 @@ elFinder.prototype.commands.quicklook = function() {
 		fsicon  = $('<div class="'+navicon+' '+navicon+'-fullscreen"/>')
 			.mousedown(function(e) {
 				var win     = self.window,
-					full    = win.is('.'+fullscreen),
+					full    = win.hasClass(fullscreen),
 					scroll  = 'scroll.'+fm.namespace,
 					$window = $(window);
 					
@@ -184,7 +184,11 @@ elFinder.prototype.commands.quicklook = function() {
 				navbar.attr('style', '').draggable(full ? 'destroy' : {});
 				win.toggleClass(fullscreen);
 				$(this).toggleClass(navicon+'-fullscreen-off');
-				$.fn.resizable && parent.add(win).resizable(full ? 'enable' : 'disable').removeClass('ui-state-disabled');
+				var collection = win;
+				if(parent.is('.ui-resizable')) {
+					collection = collection.add(parent);
+				};
+				$.fn.resizable && collection.resizable(full ? 'enable' : 'disable').removeClass('ui-state-disabled');
 			}),
 			
 		navbar  = $('<div class="elfinder-quicklook-navbar"/>')
@@ -294,7 +298,7 @@ elFinder.prototype.commands.quicklook = function() {
 				
 			if (self.opened()) {
 				state = animated;
-				win.is('.'+fullscreen) && fsicon.mousedown()
+				win.hasClass(fullscreen) && fsicon.mousedown()
 				node.length
 					? win.animate(closedCss(node), 500, close)
 					: close();

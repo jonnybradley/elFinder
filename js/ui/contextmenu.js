@@ -12,7 +12,7 @@ $.fn.elfindercontextmenu = function(fm) {
 			menu = $(this).addClass('ui-helper-reset ui-widget ui-state-default ui-corner-all elfinder-contextmenu elfinder-contextmenu-'+fm.direction)
 				.hide()
 				.appendTo('body')
-				.delegate('.'+cmItem, 'mouseenter mouseleave', function() {
+				.on('mouseenter mouseleave', '.'+cmItem, function() {
 					$(this).toggleClass('ui-state-hover')
 				}),
 			subpos  = fm.direction == 'ltr' ? 'left' : 'right',
@@ -69,8 +69,8 @@ $.fn.elfindercontextmenu = function(fm) {
 					});
 				}
 				if (!isCwd) {
-					if (self.data('disabledCmd')) {
-						$.each(self.data('disabledCmd'), function(i, v){
+					if (fm.disabledCmds) {
+						$.each(fm.disabledCmds, function(i, v){
 							if (targets[0].indexOf(i, 0) == 0) {
 								disabled = v;
 								return false;
@@ -116,6 +116,7 @@ $.fn.elfindercontextmenu = function(fm) {
 									$(this).removeClass('ui-state-hover');
 									e.preventDefault();
 								} else if (e.type == 'click') {
+									menu.hide();
 									cmd.exec(targets, $(this).data('exec'));
 								}
 							});

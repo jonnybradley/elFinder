@@ -64,6 +64,14 @@ elFinder.prototype._options = {
 	dragUploadAllow : 'auto',
 	
 	/**
+	 * Max size of chunked data of file upload
+	 * 
+	 * @type Number
+	 * @default  10485760(10MB)
+	 */
+	uploadMaxChunkSize : 10485760,
+	
+	/**
 	 * Timeout for upload using iframe
 	 *
 	 * @type Number
@@ -137,6 +145,24 @@ elFinder.prototype._options = {
 	 * @type Object
 	 **/
 	commandsOptions : {
+		// // configure shortcuts of any command
+		// // add `shortcuts` property into each command
+		// any_command_name : {
+		// 	shortcuts : [] // for disable this command's shortcuts
+		// },
+		// any_command_name : {
+		// 	shortcuts : function(fm, shortcuts) {
+		// 		// for add `CTRL + E` for this command action
+		// 		shortcuts[0]['pattern'] += ' ctrl+e';
+		// 		return shortcuts;
+		// 	}
+		// },
+		// any_command_name : {
+		// 	shortcuts : function(fm, shortcuts) {
+		// 		// for full customize of this command's shortcuts
+		// 		return [ { pattern: 'ctrl+e ctrl+down numpad_enter' + (fm.OS != 'mac' && ' enter') } ];
+		// 	}
+		// },
 		// "getfile" command options.
 		getfile : {
 			onlyURL  : false,
@@ -210,7 +236,64 @@ elFinder.prototype._options = {
 			]
 		},
 		// "info" command options.
-		info : {nullUrlDirLinkSelf : true},
+		info : {
+			nullUrlDirLinkSelf : true,
+			custom : {
+				// /**
+				//  * Example of custom info `desc`
+				//  */
+				// desc : {
+				// 	/**
+				// 	 * Lable (require)
+				// 	 * It is filtered by the `fm.i18n()`
+				// 	 * 
+				// 	 * @type String
+				// 	 */
+				// 	label : 'Description',
+				// 	
+				// 	/**
+				// 	 * Template (require)
+				// 	 * `{id}` is replaced in dialog.id
+				// 	 * 
+				// 	 * @type String
+				// 	 */
+				// 	tpl : '<div class="elfinder-info-desc"><span class="elfinder-info-spinner"></span></div>',
+				// 	
+				// 	/**
+				// 	 * Restricts to mimetypes (optional)
+				// 	 * Exact match or category match
+				// 	 * 
+				// 	 * @type Array
+				// 	 */
+				// 	mimes : ['text', 'image/jpeg', 'directory'],
+				// 	
+				// 	/**
+				// 	 * Restricts to file.hash (optional)
+				// 	 * 
+				// 	 * @ type Regex
+				// 	 */
+				// 	hashRegex : /^l\d+_/,
+				// 
+				// 	/**
+				// 	 * Request that asks for the description and sets the field (optional)
+				// 	 * 
+				// 	 * @type Function
+				// 	 */
+				// 	action : function(file, fm, dialog) {
+				// 		fm.request({
+				// 		data : { cmd : 'desc', target: file.hash },
+				// 			preventDefault: true,
+				// 		})
+				// 		.fail(function() {
+				// 			dialog.find('div.elfinder-info-desc').html(fm.i18n('unknown'));
+				// 		})
+				// 		.done(function(data) {
+				// 			dialog.find('div.elfinder-info-desc').html(data.desc);
+				// 		});
+				// 	}
+				// }
+			}
+		},
 		
 		netmount: {
 			ftp: {
@@ -281,6 +364,14 @@ elFinder.prototype._options = {
 	defaultView : 'icons',
 	
 	/**
+	 * Hash of default directory path to open
+	 * 
+	 * @type String
+	 * @default ""
+	 */
+	startPathHash : '',
+	
+	/**
 	 * UI plugins to load.
 	 * Current dir ui and dialogs loads always.
 	 * Here set not required plugins as folders tree/toolbar/statusbar etc.
@@ -318,8 +409,21 @@ elFinder.prototype._options = {
 		tree : {
 			// expand current root on init
 			openRootOnLoad : true,
+			// expand current work directory on open
+			openCwdOnOpen  : true,
 			// auto load current dir parents
 			syncTree : true
+			// ,
+			// /**
+			//  * Add CSS class name to navbar directories (optional)
+			//  * see: https://github.com/Studio-42/elFinder/pull/1061
+			//  * 
+			//  * @type Function
+			//  */
+			// getClass: function(dir) {
+			// 	// ex. This adds the directory's name (lowercase) with prefix as a CSS class
+			// 	return 'elfinder-tree-' + dir.name.replace(/[ "]/g, '').toLowerCase();
+			// }
 		},
 		// navbar options
 		navbar : {
