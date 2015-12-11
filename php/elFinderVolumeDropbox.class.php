@@ -147,7 +147,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 				if (class_exists('OAuth', false)) {
 					$this->oauth = new Dropbox_OAuth_PHP($options['consumerKey'], $options['consumerSecret']);
 				} else {
-					if (! class_exists('HTTP_OAuth_Consumer')) {
+					if (! class_exists('HTTP_OAuth_Consumer', false)) {
 						// We're going to try to load in manually
 						include 'HTTP/OAuth/Consumer.php';
 					}
@@ -312,7 +312,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 				if (class_exists('OAuth', false)) {
 					$this->oauth = new Dropbox_OAuth_PHP($this->options['consumerKey'], $this->options['consumerSecret']);
 				} else {
-					if (! class_exists('HTTP_OAuth_Consumer')) {
+					if (! class_exists('HTTP_OAuth_Consumer', false)) {
 						// We're going to try to load in manually
 						include 'HTTP/OAuth/Consumer.php';
 					}
