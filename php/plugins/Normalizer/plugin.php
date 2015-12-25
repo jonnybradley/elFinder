@@ -167,6 +167,9 @@ class elFinderPluginNormalizer
 				$str = strtolower($str);
 			}
 		}
+		if ($opts['convmap'] && is_array($opts['convmap'])) {
+			$str = strtr($str, $opts['convmap']);
+		}
 		return $str;
 	}
 }
