@@ -484,7 +484,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 			$dir = $this->stat($id);
 			$path .= $dir['name'].$this->separator;
 		}
-		return $path.$file['name'];
+		return $this->rootName.$this->separator.$path.$file['name'];
 	}
 	
 	/**
