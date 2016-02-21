@@ -1,4 +1,4 @@
-2016-0x-xx  
+2016-02-21  Naoki Sawada  <hypweb@gmail.com>
 
 	* elFinder (2.1.15):
 		- [js:command] inheritable elFinder.command object rel. #1545
