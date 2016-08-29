@@ -6,14 +6,14 @@
  *
  * @author Dmitry (dio) Levashov, dio@std42.ru
  **/
-(elFinder.prototype.commands.getfile = function() {
+elFinder.prototype.commands.getfile = function() {
 	var self   = this,
 		fm     = this.fm,
 		filter = function(files) {
 			var o = self.options;
 
 			files = $.map(files, function(file) {
-				return (file.mime != 'directory' || o.folders) && file.read ? file : null;
+				return file.mime != 'directory' || o.folders ? file : null;
 			});
 
 			return o.multiple || files.length == 1 ? files : [];
@@ -39,26 +39,13 @@
 			tmb   = fm.option('tmbUrl'),
 			dfrd  = $.Deferred()
 				.done(function(data) {
-					var res,
-						done = function() {
-							if (opts.oncomplete == 'close') {
-								fm.hide();
-							} else if (opts.oncomplete == 'destroy') {
-								fm.destroy();
-							}
-						};
-					
 					fm.trigger('getfile', {files : data});
+					self.callback(data, fm);
 					
-					res = self.callback(data, fm);
-					
-					if (typeof res === 'object' && typeof res.done === 'function') {
-						res.done(done)
-						.fail(function(error) {
-							error && fm.error(error);
-						});
-					} else {
-						done();
+					if (opts.oncomplete == 'close') {
+						fm.hide();
+					} else if (opts.oncomplete == 'destroy') {
+						fm.destroy();
 					}
 				}),
 			result = function(file) {
@@ -69,27 +56,17 @@
 			req = [], 
 			i, file, dim;
 
+		if (this.getstate() == -1) {
+			return dfrd.reject();
+		}
+			
 		for (i = 0; i < cnt; i++) {
 			file = files[i];
 			if (file.mime == 'directory' && !opts.folders) {
 				return dfrd.reject();
 			}
 			file.baseUrl = url;
-			if (file.url == '1') {
-				req.push(fm.request({
-					data : {cmd : 'url', target : file.hash},
-					notify : {type : 'url', cnt : 1, hideCnt : true},
-					preventDefault : true
-				})
-				.done(function(data) {
-					if (data.url) {
-						var rfile = fm.file(this.hash);
-						rfile.url = this.url = data.url;
-					}
-				}.bind(file)));
-			} else {
-				file.url = fm.url(file.hash);
-			}
+			file.url     = fm.url(file.hash);
 			file.path    = fm.path(file.hash);
 			if (file.tmb && file.tmb != 1) {
 				file.tmb = tmb + file.tmb;
@@ -99,7 +76,7 @@
 					dim = file.dim.split('x');
 					file.width = dim[0];
 					file.height = dim[1];
-				} else if (opts.getImgSize && file.mime.indexOf('image') !== -1) {
+				} else if (file.mime.indexOf('image') !== -1) {
 					req.push(fm.request({
 						data : {cmd : 'dim', target : file.hash},
 						notify : {type : 'dim', cnt : 1, hideCnt : true},
@@ -127,4 +104,4 @@
 		return dfrd.resolve(result(files));
 	}
 
-}).prototype = { forceLoad : true }; // this is required command
+}

@@ -21,27 +21,11 @@ elFinder.prototype.command = function(fm) {
 	this.name = '';
 	
 	/**
-	 * Command icon class name with out 'elfinder-button-icon-'
-	 * Use this.name if it is empty
-	 *
-	 * @type  String
-	 */
-	this.className = '';
-
-	/**
 	 * Short command description
 	 *
 	 * @type  String
 	 */
 	this.title = '';
-	
-	/**
-	 * Linked(Child) commands name
-	 * They are loaded together when tthis command is loaded.
-	 * 
-	 * @type  Array
-	 */
-	this.linkedCmds = [];
 	
 	/**
 	 * Current command state
@@ -84,7 +68,7 @@ elFinder.prototype.command = function(fm) {
 	this._handlers = {
 		enable  : function() { this.update(void(0), this.value); },
 		disable : function() { this.update(-1, this.value); },
-		'open reload load sync'    : function() { 
+		'open reload load'    : function(e) { 
 			this._disabled = !(this.alwaysEnabled || this.fm.isCommandEnabled(this.name));
 			this.update(void(0), this.value)
 			this.change(); 
@@ -121,22 +105,12 @@ elFinder.prototype.command = function(fm) {
 	 */
 	this.setup = function(name, opts) {
 		var self = this,
-			fm   = this.fm, i, s, sc;
+			fm   = this.fm, i, s;
 
 		this.name      = name;
-		this.title     = fm.messages['cmd'+name] ? fm.i18n('cmd'+name)
-		               : ((this.extendsCmd && fm.messages['cmd'+this.extendsCmd]) ? fm.i18n('cmd'+this.extendsCmd) : name), 
+		this.title     = fm.messages['cmd'+name] ? fm.i18n('cmd'+name) : name, 
 		this.options   = $.extend({}, this.options, opts);
 		this.listeners = [];
-
-		if (opts.shortcuts) {
-			if (typeof opts.shortcuts === 'function') {
-				sc = opts.shortcuts(this.fm, this.shortcuts);
-			} else if ($.isArray(opts.shortcuts)) {
-				sc = opts.shortcuts;
-			}
-			this.shortcuts = sc || [];
-		}
 
 		if (this.updateOnSelect) {
 			this._handlers.select = function() { this.update(void(0), this.value); }
@@ -294,4 +268,6 @@ elFinder.prototype.command = function(fm) {
 			? $.map($.isArray(hashes) ? hashes : [hashes], function(hash) { return fm.file(hash) || null })
 			: fm.selectedFiles();
 	}
-};
+}
+
+

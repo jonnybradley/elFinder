@@ -11,7 +11,7 @@ $.fn.elfinderworkzone = function(fm) {
 			wdelta = wz.outerHeight(true) - wz.height(),
 			parent = wz.parent();
 			
-		parent.add(window).on('resize.' + fm.namespace, function() {
+		parent.add(window).bind('resize', function() {
 				var height = parent.height();
 
 				parent.children(':visible:not(.'+cl+')').each(function() {
@@ -26,4 +26,6 @@ $.fn.elfinderworkzone = function(fm) {
 			});
 	});
 	return this;
-};
+}
+
+

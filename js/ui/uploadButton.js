@@ -7,9 +7,9 @@
 $.fn.elfinderuploadbutton = function(cmd) {
 	return this.each(function() {
 		var button = $(this).elfinderbutton(cmd)
-				.off('click'), 
+				.unbind('click'), 
 			form = $('<form/>').appendTo(button),
-			input = $('<input type="file" multiple="true" title="'+cmd.fm.i18n('selectForUpload')+'"/>')
+			input = $('<input type="file" multiple="true"/>')
 				.change(function() {
 					var _input = $(this);
 					if (_input.val()) {
